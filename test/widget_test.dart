@@ -30,8 +30,8 @@ void main() {
   tearDown(() => dir.deleteSync(recursive: true));
 
   Future<void> pumpApp(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(1080, 4000);
-    tester.view.devicePixelRatio = 2.5;
+    tester.view.physicalSize = const Size(1080, 6000); // 360 dp wide: a small phone
+    tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ZahitEfendiApp(store: store));
     await tester.pumpAndSettle();

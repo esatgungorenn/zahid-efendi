@@ -5,9 +5,9 @@ String fmt(double v, [int digits = 2]) =>
     v.toStringAsFixed(digits).replaceAll('.', ',');
 
 String fmtDate(DateTime d) =>
-    '${_2(d.day)}.${_2(d.month)}.${d.year}';
+    '${_pad2(d.day)}.${_pad2(d.month)}.${d.year}';
 
-String _2(int n) => n.toString().padLeft(2, '0');
+String _pad2(int n) => n.toString().padLeft(2, '0');
 
 const _months = [
   'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',

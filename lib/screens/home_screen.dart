@@ -42,16 +42,12 @@ class HomeScreen extends StatelessWidget {
           _Header(exam: e),
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1.55,
-              children: [
-                _scoreCard(e, prev),
-                _percentileCard(e, prev),
+            // Rows of equal-height cards: a fixed aspect ratio overflows on
+            // narrow phones and with large system font sizes.
+            child: Column(children: [
+              _pair(_scoreCard(e, prev), _percentileCard(e, prev)),
+              const SizedBox(height: 8),
+              _pair(
                 _netCard(e, prev),
                 StatCard(
                   label: 'Girebildiği lise',
@@ -60,8 +56,8 @@ class HomeScreen extends StatelessWidget {
                   highlighted: true,
                   onTap: onOpenSchools,
                 ),
-              ],
-            ),
+              ),
+            ]),
           ),
           const SectionLabel('Ders netleri'),
           Padding(
@@ -87,6 +83,14 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _pair(Widget a, Widget b) => IntrinsicHeight(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Expanded(child: a),
+          const SizedBox(width: 8),
+          Expanded(child: b),
+        ]),
+      );
 
   Widget _scoreCard(Exam e, Exam? prev) {
     final d = prev == null ? null : e.score - prev.score;
