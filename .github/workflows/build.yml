@@ -71,7 +71,7 @@ jobs:
 
       - run: mv build/app/outputs/flutter-apk/app-release.apk zahit-efendi.apk
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: zahit-efendi-apk
           path: zahit-efendi.apk
