@@ -21,3 +21,4 @@ pubspec.lock
 *.jks
 *.keystore
 key.properties
+__pycache__/
