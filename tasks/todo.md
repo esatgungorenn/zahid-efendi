@@ -49,11 +49,17 @@ Babam her haftaki LGS deneme sonuçlarını Excel'de takip ediyor. Amaç: veriyi
 - [x] Ekranlar 2→6 + widget testleri yazıldı (CI'da koşacak)
 - [x] Yedekleme (dışa/içe aktarma)
 - [x] GitHub Actions: analyze + test + imzalı APK + Release
-- [ ] CI'da ilk yeşil çalıştırma (push izni bekleniyor)
-- [ ] Lise tablosu (81 il) → assets/schools.json, doğrulama scripti
+- [x] CI yeşil: analyze temiz, 27 test geçiyor, APK derleniyor
+- [x] Lise tablosu: 81 il, 3149 sınavlı program (tabanpuanlari.net; 2026 puan, 2025 yüzdelik)
+- [ ] İmza secret'ları (kullanıcı ekleyecek) → imzalı Release
 - [ ] Telefonda duman testi
 
 ## Notlar
 - Bu ortamda Flutter SDK / pub.dev erişimi yok → tüm testler CI'da.
 - android/ klasörünün yalnızca build.gradle.kts ve AndroidManifest.xml'i repoda; geri kalanı CI'da `flutter create` ile üretilir.
 - İmza anahtarı repo dışında; GitHub secret olarak tutulur (ZE_KEYSTORE_BASE64, ZE_KEYSTORE_PASSWORD, ZE_KEY_ALIAS, ZE_KEY_PASSWORD).
+
+## Review (07.10.2026)
+- Testler iki gerçek taşma hatası yakaladı (ana sayfa kart ızgarası, liseler grup başlığı); düzeltildi, widget testleri 360dp genişlikte koşuyor.
+- 144 programın 2025 yüzdeliği yok (yeni program); yalnızca puan modunda görünürler.
+- Kaynak bazı aynı görünen programları ayrı listeliyor; isimlerine (2) eklendi.
