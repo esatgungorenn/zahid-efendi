@@ -37,9 +37,22 @@ jobs:
       - name: Uygulama ikonu
         run: dart run flutter_launcher_icons
 
-      - run: flutter analyze --no-fatal-infos
+      - name: Analiz ve testler
+        run: |
+          set -o pipefail
+          { flutter analyze --no-fatal-infos && flutter test --reporter expanded; } 2>&1 | tee ci.log
 
-      - run: flutter test --reporter github
+      # Logs are not reachable from the dev sandbox; publish them to a branch on failure.
+      - name: Hata kaydını yayınla
+        if: failure()
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git checkout --orphan ci-logs
+          git rm -rfq --cached .
+          git add -f ci.log
+          git commit -qm "CI log ${{ github.sha }}"
+          git push -f origin ci-logs
 
       - name: İmza anahtarı
         if: env.HAS_KEY == 'true'
