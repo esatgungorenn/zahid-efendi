@@ -238,9 +238,11 @@ class _GroupTitle extends StatelessWidget {
         child: Row(children: [
           Icon(icon, size: 18, color: color),
           const SizedBox(width: 6),
-          Text(text,
-              style: TextStyle(
-                  color: color, fontSize: 15, fontWeight: FontWeight.w500)),
+          Flexible(
+            child: Text(text,
+                style: TextStyle(
+                    color: color, fontSize: 15, fontWeight: FontWeight.w500)),
+          ),
         ]),
       );
 }
