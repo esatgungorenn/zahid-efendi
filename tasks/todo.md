@@ -49,7 +49,7 @@ Babam her haftaki LGS deneme sonuçlarını Excel'de takip ediyor. Amaç: veriyi
 - [x] Ekranlar 2→6 + widget testleri yazıldı (CI'da koşacak)
 - [x] Yedekleme (dışa/içe aktarma)
 - [x] GitHub Actions: analyze + test + imzalı APK + Release
-- [x] CI yeşil: analyze temiz, 27 test geçiyor, APK derleniyor
+- [x] CI yeşil: analyze temiz, tüm testler geçiyor, APK derleniyor
 - [x] Lise tablosu: 81 il, 3149 sınavlı program (tabanpuanlari.net; 2026 puan, 2025 yüzdelik)
 - [ ] İmza secret'ları (kullanıcı ekleyecek) → imzalı Release
 - [ ] Telefonda duman testi
