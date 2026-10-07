@@ -26,6 +26,23 @@ TYPES = {
 }
 CITY_ALIAS = {'Afyon': 'Afyonkarahisar'}
 
+# The source title-cases with ASCII rules, turning İ into I ("Imam", "Istanbul").
+# Words that genuinely start with dotless I are kept.
+DOTLESS_I = {'Ilgın', 'Ilıcak', 'Ilıca', 'Iğdır', 'Isparta', 'Ilgaz', 'Işıkkent',
+             'Işıl', 'Irmak', 'Işık'}
+
+
+def fix_i(text: str) -> str:
+    return re.sub(r"\bI(\w*)", lambda m: m.group(0) if m.group(0) in DOTLESS_I
+                  else 'İ' + m.group(1), text)
+
+
+def variant(p) -> list:
+    out = [p.get('language') or '', p.get('score_type') or '',
+           f"{p['duration']} yıl" if p.get('duration') else '',
+           'Pansiyonlu' if p.get('boarding') == 'Var' else '']
+    return out
+
 
 def get(url):
     for attempt in range(4):
@@ -49,6 +66,9 @@ def main():
         html = get(f'{BASE}/lgs/{slug}')
         ex = [p for p in programs(html) if p.get('admission_mode') == 'exam']
         per_inst = collections.Counter(p['institution_id'] for p in ex)
+        groups = collections.defaultdict(list)
+        for p in ex:
+            groups[(p['institution_id'], p.get('department_name'))].append(p)
         n = 0
         for p in ex:
             if p['id'] in seen:
@@ -66,11 +86,22 @@ def main():
                 skipped['no-data'] += 1
                 continue
             name = p['institution_name'].strip()
-            if per_inst[p['institution_id']] > 1:
-                name = f"{name} ({p['department_name'].strip()})"
+            extra = []
+            dept = (p.get('department_name') or '').strip()
+            if per_inst[p['institution_id']] > 1 and dept:
+                extra.append(dept)
+            same = groups[(p['institution_id'], p.get('department_name'))]
+            if len(same) > 1:
+                vs = [variant(x) for x in same]
+                mine = variant(p)
+                extra += [v for i, v in enumerate(mine)
+                          if v and len({x[i] for x in vs}) > 1]
+            if extra:
+                name = f"{name} ({', '.join(extra)})"
+            name = fix_i(name)
             rows.append({
                 'il': CITY_ALIAS.get(p['city'], p['city']),
-                'ilce': p.get('district') or '',
+                'ilce': fix_i(p.get('district') or ''),
                 'okul': name,
                 'tur': t,
                 'taban_puan': score or '',
