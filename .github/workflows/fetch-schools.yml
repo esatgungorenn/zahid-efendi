@@ -1,0 +1,26 @@
+name: Lise verisi çek
+
+on:
+  push:
+    branches: [data-fetch]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4
+      - run: python tool/fetch_schools.py
+      - name: Sonucu commit et
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data
+          git commit -m "Lise verisi (otomatik)" || echo "değişiklik yok"
+          git push
